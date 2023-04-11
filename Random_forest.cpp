@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-10 14:58:54
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 16:51:03
+ * @ Modified time: 2023-04-11 17:40:10
  * @ Description: Implementation of the Random_Forest derived class.
  */
 
@@ -19,7 +19,7 @@ void Random_Forest::fit()
     trees_.reserve(num_trees_);
     for (size_t i{0}; i < num_trees_; i++) 
     {
-        auto tree = std::make_shared<Tree_Model>(data_loader_, splitter_, true, max_tree_depth, min_samples_split);
+        std::shared_ptr<Decision_Tree> tree = std::make_shared<Decision_Tree>(data_loader_, splitter_, true, max_tree_depth_, min_samples_split_);
         tree->fit();
         std::cout<<"Tree "<<i+1<<"/"<<num_trees_<<" built."<<std::endl;
         trees_.push_back(tree);

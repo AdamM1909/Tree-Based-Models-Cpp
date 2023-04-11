@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 17:02:11
+ * @ Modified time: 2023-04-11 17:42:31
  * @ Description: Implementation of the Decision_Tree class.
  */
 
@@ -20,7 +20,7 @@ Decision_Tree::~Decision_Tree() {delete root_;}
 void Decision_Tree::fit() 
 {
     root_ = boostrapped_data_ ? recursively_build_tree(data_loader_->bootstrapped_train_data(), 0) 
-                              : recursively_build_tree(data_loader_->train_data(), 0);   
+                              : recursively_build_tree(data_loader_->train_data(), 0);  
 }
 float Decision_Tree::predict(const std::vector<float>& features) const {return root_->predict(features);}
 void Decision_Tree::evaluate_test_data()

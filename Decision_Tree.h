@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:37:37
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 17:00:27
+ * @ Modified time: 2023-04-11 17:21:44
  * @ Description: Header file for the Decision_Tree class.
  * 
  * This class has access via a shared pointer to a Data_Loader and Splitter object
@@ -22,14 +22,14 @@
 #include "Tree_Model.h"
 
 
-class Decision_Tree : Tree_Model
+class Decision_Tree : public Tree_Model
 {
 public:
     Decision_Tree(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, bool boostrapped_data,
                  int max_tree_depth, int min_samples_split);
-    ~Decision_Tree();
-    void fit();
-    float predict(const std::vector<float>& features) const;
+    virtual ~Decision_Tree();
+    virtual void fit() override;
+    virtual float predict(const std::vector<float>& features) const;
     void evaluate_test_data();
 private:
     Node* root_;

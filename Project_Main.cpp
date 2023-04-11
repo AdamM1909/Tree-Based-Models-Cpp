@@ -2,10 +2,10 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:53:08
+ * @ Modified time: 2023-04-11 17:49:18
  * @ Description: Fits a decision tree and a radnom forest to a data set printing out the test accuracy and the confusion matricies.
  * 
- * Run with g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Internal_Node.cpp, Leaf_Node.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp
+ * Run with g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Internal_Node.cpp, Leaf_Node.cpp, Tree_Model.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp
  * ./Project
  */
 
@@ -18,6 +18,7 @@
 #include "Node.h"
 #include "Internal_Node.h"
 #include "Leaf_Node.h"
+#include "Tree_Model.h"
 #include "Decision_Tree.h"
 #include "Random_Forest.h"
 
@@ -32,13 +33,13 @@ int main()
     // Decision Tree
     int max_tree_depth{1000};
     int min_split_num{2};
-    bool train_on_bootsrapped_data{false};
-    std::cout<<"Decision tree: "<<std::endl;
-    Decision_Tree dt1(data_loader, gini_splitter, train_on_bootsrapped_data, max_tree_depth, min_split_num);
+    bool train_DT_on_bootsrapped_data{false};
+    std::cout<<"Decision tree: \n"<<std::endl;
+    Decision_Tree dt1(data_loader, gini_splitter, train_DT_on_bootsrapped_data, max_tree_depth, min_split_num);
     dt1.fit();
     dt1.evaluate_test_data();
     // Random Forest 
-    int num_trees{10};
+    int num_trees{5};
     std::cout<<"\n\nRandom Forest with "<<num_trees<<" trees:"<<std::endl;
     Random_Forest rf1(data_loader, gini_splitter, num_trees, max_tree_depth, min_split_num);
     rf1.fit();
