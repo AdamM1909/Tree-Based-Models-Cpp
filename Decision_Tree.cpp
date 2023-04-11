@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:33:02
+ * @ Modified time: 2023-04-11 16:07:08
  * @ Description: Implementation of the Decision_Tree class.
  */
 
@@ -14,19 +14,19 @@
 
 Decision_Tree::Decision_Tree(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, bool boostrapped_data,
                            int max_tree_depth, int min_samples_split) :
-    data_loader_(data_loader), splitter_(splitter), boostrapped_data_(boostrapped_data), n_features_(data_loader->n_features),
-    n_labels_(data_loader->n_labels), max_tree_depth_(max_tree_depth), min_samples_split_(min_samples_split),
+    data_loader_(data_loader), splitter_(splitter), boostrapped_data_(boostrapped_data), n_features_(data_loader->n_features()),
+    n_labels_(data_loader->n_labels()), max_tree_depth_(max_tree_depth), min_samples_split_(min_samples_split),
     root_(nullptr) {};
 Decision_Tree::~Decision_Tree() {delete root_;}
 void Decision_Tree::fit() 
 {
     root_ = boostrapped_data_ ? recursively_build_tree(data_loader_->bootstrapped_train_data(), 0) 
-                              : recursively_build_tree(data_loader_->train_data(), 0);
+                              : recursively_build_tree(data_loader_->train_data(), 0);   
 }
 float Decision_Tree::predict(const std::vector<float>& features) const {return root_->predict(features);}
 void Decision_Tree::evaluate_test_data()
 {
-    std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels, std::vector<int>(data_loader_->n_labels, 0));
+    std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels(), std::vector<int>(data_loader_->n_labels(), 0));
     int num_correct{0};
     if (data_loader_->test_data().size() == 0)
     {
@@ -44,21 +44,21 @@ void Decision_Tree::evaluate_test_data()
     }
 
     double accuracy = static_cast<double>(num_correct) / static_cast<double>(data_loader_->test_data().size());
-    std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
+    // std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
     std::cout<<"Test Data Accuracy: "<<accuracy<<std::endl;
     std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
     std::cout<<"Test Data Confusion matrix:\n "<< std::endl;
 
     // Print out a nicely formatted confusion matrix.
     std::cout<<"\t\t\t"<<"True Labels"<<"\t\n\t\t\t";
-    for (size_t i{0}; i < data_loader_->n_labels; ++i) {std::cout<<i<<"\t";}
+    for (size_t i{0}; i < data_loader_->n_labels(); ++i) {std::cout<<i<<"\t";}
     std::cout << std::endl;
 
-    for (size_t i{0}; i < data_loader_->n_labels; ++i) 
+    for (size_t i{0}; i < data_loader_->n_labels(); ++i) 
     {    
         (i == 0) ? std::cout<<"Predicted Labels " : std::cout<<"\t\t ";
         std::cout<<i<<"\t";
-        for (size_t j{0}; j < data_loader_->n_labels; ++j) {std::cout<<confusion_matrix[i][j]<<"\t";}
+        for (size_t j{0}; j < data_loader_->n_labels(); ++j) {std::cout<<confusion_matrix[i][j]<<"\t";}
         std::cout<<std::endl;
     }
     std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;

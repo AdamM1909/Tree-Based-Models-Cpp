@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 13:59:34
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:18:51
+ * @ Modified time: 2023-04-11 16:15:21
  * @ Description: Header file for the Random_Forest class.
  * 
  * This class has access via a shared pointer to a Data_Loader and Splitter object
@@ -18,6 +18,7 @@
 #include "Splitter.h"
 #include "Data_Loader.h"
 #include "Decision_Tree.h"
+#include "Tree_Model.h"
 
 class Random_Forest 
 {
@@ -34,7 +35,7 @@ public:
     int min_samples_split;
     int num_trees_;
 private:
-    std::vector<std::shared_ptr<Decision_Tree>> trees_;
+    std::vector<std::shared_ptr<Tree_Model>> trees_;
     std::shared_ptr<Data_Loader> data_loader_;
     std::shared_ptr<Splitter> splitter_;
 };

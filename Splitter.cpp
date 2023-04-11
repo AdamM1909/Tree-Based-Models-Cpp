@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-08 14:45:09
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:24:14
+ * @ Modified time: 2023-04-11 15:39:34
  * @ Description: Implementation of the Splitter base class.
  */
 #include "Splitter.h"
@@ -69,7 +69,6 @@ std::pair<size_t, float> Splitter::find_best_split(const std::vector<std::pair<s
     }
     size_t best_feature = index_of_min_second_element(best_splits);
     std::pair<size_t, double> best_feature_threshold = std::make_pair(best_feature, best_splits[best_feature].first);
-    std::cout<<"Feature: "<<best_feature<<" Threshold: "<<best_feature_threshold.second<<std::endl;
     return best_feature_threshold;
 }
 size_t Splitter::index_of_min_second_element(const std::vector<std::pair<double, double>>& vec)

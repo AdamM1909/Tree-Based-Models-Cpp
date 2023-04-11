@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:15:55
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:17:42
+ * @ Modified time: 2023-04-11 15:38:52
  * @ Description: Implementation of the Internal Node derived class.
  */
 

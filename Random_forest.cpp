@@ -2,10 +2,9 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-10 14:58:54
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:25:55
+ * @ Modified time: 2023-04-11 16:15:49
  * @ Description: Implementation of the Random_Forest class.
  */
-
 
 #include "Random_Forest.h"
 
@@ -19,12 +18,13 @@ void Random_Forest::fit()
     trees_.reserve(num_trees_);
     for (size_t i{0}; i < num_trees_; i++) 
     {
-        auto tree = std::make_shared<Decision_Tree>(data_loader_, splitter_, true, max_tree_depth, min_samples_split);
+        auto tree = std::make_shared<Tree_Model>(data_loader_, splitter_, true, max_tree_depth, min_samples_split);
         tree->fit();
+        std::cout<<"Tree "<<i+1<<"/"<<num_trees_<<" built."<<std::endl;
         trees_.push_back(tree);
     }
 };
- float Random_Forest::predict(const std::vector<float>& features) const
+float Random_Forest::predict(const std::vector<float>& features) const
 {   
     std::unordered_map<float, int> label_votes;
     // Iterate over the decision trees and use each one to make a prediction
@@ -48,7 +48,7 @@ void Random_Forest::fit()
 }
 void Random_Forest::evaluate_test_data()
 {
-    std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels, std::vector<int>(data_loader_->n_labels, 0));
+    std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels(), std::vector<int>(data_loader_->n_labels(), 0));
     int num_correct{0};
     if (data_loader_->test_data().size() == 0)
     {
@@ -64,24 +64,22 @@ void Random_Forest::evaluate_test_data()
         if (predicted_label == true_label) {num_correct++;}
         confusion_matrix[predicted_label][true_label]++;
     }
-
     double accuracy = static_cast<double>(num_correct) / static_cast<double>(data_loader_->test_data().size());
-    std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
     std::cout<<"Test Data Accuracy: "<<accuracy<<std::endl;
     std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
     std::cout<<"Test Data Confusion matrix:\n "<< std::endl;
 
     // Print out a nicely formatted confusion matrix.
     std::cout<<"\t\t\t"<<"True Labels"<<"\t\n\t\t\t";
-    for (size_t i{0}; i < data_loader_->n_labels; ++i) {std::cout<<i<<"\t";}
+    for (size_t i{0}; i < data_loader_->n_labels(); ++i) {std::cout<<i<<"\t";}
     std::cout << std::endl;
 
     // Print rows and row labels
-    for (size_t i{0}; i < data_loader_->n_labels; ++i) 
+    for (size_t i{0}; i < data_loader_->n_labels(); ++i) 
     {    
         (i == 0) ? std::cout<<"Predicted Labels " : std::cout<<"\t\t ";
         std::cout<<i<<"\t";
-        for (size_t j{0}; j < data_loader_->n_labels; ++j) {std::cout<<confusion_matrix[i][j]<<"\t";}
+        for (size_t j{0}; j < data_loader_->n_labels(); ++j) {std::cout<<confusion_matrix[i][j]<<"\t";}
         std::cout<<std::endl;
     }
     std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;

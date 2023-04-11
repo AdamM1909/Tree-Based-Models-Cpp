@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:31:58
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:11:25
+ * @ Modified time: 2023-04-11 16:05:17
  * @ Description: Implements fucntionality of the "Data_Loader" class.
  */
 
@@ -11,8 +11,8 @@
 Data_Loader::Data_Loader(const std::string& filename, bool first_row_as_labels, float train_ratio)
 {
     load_data(filename, first_row_as_labels);
-    n_labels = calc_n_labels();
-    n_features = calc_n_features();
+    n_labels_ = n_labels();
+    n_features_ = n_features();
     random_train_split(train_ratio);
 }
 void Data_Loader::print_data_point(int index) const
@@ -85,14 +85,14 @@ void Data_Loader::random_train_split(float train_ratio)
         train_data_.insert(train_data_.begin(), data_.begin(), data_.begin() + num_train);
         test_data_.insert(test_data_.begin(), data_.begin() + num_train, data_.end());
     }
-int Data_Loader::calc_n_labels()
+int Data_Loader::n_labels()
     {
         // Set to count disticnt items.
         std::set<float> unique_labels;
         for (auto& pair : data_) {unique_labels.insert(pair.second);}
         return unique_labels.size();
     }
-int Data_Loader::calc_n_features(){return data_[0].first.size();}
+int Data_Loader::n_features(){return data_[0].first.size();}
 const std::vector<std::pair<std::vector<float>, float>>& Data_Loader::train_data() const {return train_data_;}
 const std::vector<std::pair<std::vector<float>, float>>& Data_Loader::bootstrapped_train_data() 
 {
