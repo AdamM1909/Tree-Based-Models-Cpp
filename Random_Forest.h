@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 13:59:34
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 16:15:21
+ * @ Modified time: 2023-04-11 17:02:17
  * @ Description: Header file for the Random_Forest class.
  * 
  * This class has access via a shared pointer to a Data_Loader and Splitter object
@@ -20,23 +20,23 @@
 #include "Decision_Tree.h"
 #include "Tree_Model.h"
 
-class Random_Forest 
+class Random_Forest : Tree_Model
 {
 public:
     Random_Forest(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, 
-                int num_trees, int max_tree_depth, int min_samples_split);
+            int num_trees, int max_tree_depth, int min_samples_split);
     ~Random_Forest();
     void fit();
     float predict(const std::vector<float>& features) const;
     void evaluate_test_data();
-    std::shared_ptr<Splitter> get_splitter() const;
-    std::shared_ptr<Data_Loader> get_data_loader() const;
+    // std::shared_ptr<Splitter> get_splitter() const;
+    // std::shared_ptr<Data_Loader> get_data_loader() const;
     int max_tree_depth;
     int min_samples_split;
     int num_trees_;
 private:
     std::vector<std::shared_ptr<Tree_Model>> trees_;
-    std::shared_ptr<Data_Loader> data_loader_;
-    std::shared_ptr<Splitter> splitter_;
+    // std::shared_ptr<Data_Loader> data_loader_;
+    // std::shared_ptr<Splitter> splitter_;
 };
 #endif

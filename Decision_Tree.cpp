@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 16:07:08
+ * @ Modified time: 2023-04-11 17:02:11
  * @ Description: Implementation of the Decision_Tree class.
  */
 
@@ -13,10 +13,9 @@
 #include "Leaf_Node.h"
 
 Decision_Tree::Decision_Tree(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, bool boostrapped_data,
-                           int max_tree_depth, int min_samples_split) :
-    data_loader_(data_loader), splitter_(splitter), boostrapped_data_(boostrapped_data), n_features_(data_loader->n_features()),
-    n_labels_(data_loader->n_labels()), max_tree_depth_(max_tree_depth), min_samples_split_(min_samples_split),
-    root_(nullptr) {};
+                        int max_tree_depth, int min_samples_split) :
+                        Tree_Model(data_loader, splitter, max_tree_depth, min_samples_split), 
+                        root_(nullptr) {};
 Decision_Tree::~Decision_Tree() {delete root_;}
 void Decision_Tree::fit() 
 {

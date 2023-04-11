@@ -1,6 +1,12 @@
 
 #include "Tree_Model.h"
+#include "Data_Loader.h"
+#include <memory>
 
+Tree_Model::Tree_Model(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, 
+                    int max_tree_depth, int min_samples_split) :
+                    data_loader_(data_loader), splitter_(splitter), max_tree_depth_(max_tree_depth), 
+                    min_samples_split_(min_samples_split) {}
 void Tree_Model::evaluate_test_data() 
 {
     std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels(), std::vector<int>(data_loader_->n_labels(), 0));
@@ -38,4 +44,6 @@ void Tree_Model::evaluate_test_data()
         std::cout<<std::endl;
     }
     std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
-}
+};
+std::shared_ptr<Splitter> Tree_Model::get_splitter() const {return splitter_;}
+std::shared_ptr<Data_Loader> Tree_Model::get_data_loader() const {return data_loader_;}

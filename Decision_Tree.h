@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:37:37
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 16:17:00
+ * @ Modified time: 2023-04-11 17:00:27
  * @ Description: Header file for the Decision_Tree class.
  * 
  * This class has access via a shared pointer to a Data_Loader and Splitter object
@@ -19,9 +19,10 @@
 #include "Data_Loader.h"
 #include "Splitter.h"
 #include "Node.h"
+#include "Tree_Model.h"
 
 
-class Decision_Tree 
+class Decision_Tree : Tree_Model
 {
 public:
     Decision_Tree(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, bool boostrapped_data,
@@ -32,12 +33,6 @@ public:
     void evaluate_test_data();
 private:
     Node* root_;
-    std::shared_ptr<Data_Loader> data_loader_;
-    std::shared_ptr<Splitter> splitter_;
-    int n_features_;
-    int n_labels_; 
-    int max_tree_depth_;
-    int min_samples_split_; 
     bool boostrapped_data_;
     bool is_pure_node(const std::vector<std::pair<std::vector<float>, float>>& data);
     bool is_valid_leaf(const std::vector<std::pair<std::vector<float>, float>>& data, int depth);
