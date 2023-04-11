@@ -2,11 +2,12 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-08 14:45:09
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:39:34
+ * @ Modified time: 2023-04-11 18:57:32
  * @ Description: Implementation of the Splitter base class.
  */
 #include "Splitter.h"
 #include <iostream>
+#include <limits>
 
 Splitter::~Splitter() {};
 std::vector<size_t> Splitter::sort_by_feature(const std::vector<std::pair<std::vector<float>, float>>& data, int feature_idx)
@@ -31,20 +32,35 @@ std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const st
         // Find the best split for this feature based on the criterion. 
         std::vector<std::pair<double, double>> split_scores;
         split_scores.reserve(data.size());
+        // Set up [left ... | ... right] split data structure and slide the split along the ordered indexes.
         std::vector<size_t> left_indexes = sorted_indexes;
         std::vector<size_t> right_indexes = {};
-        // Set up first split.
         right_indexes.push_back(left_indexes.back());
         left_indexes.pop_back();
+        // Set up a check variable to ensure each threshold is only checked once.
+        // double last_threshold = std::numeric_limits<double>::quiet_NaN();
+        
+        float last_seen_feature = data[right_indexes.back()].first[feature_idx];
+
         // Iterate through all splits.
-        for (size_t i{}; i < sorted_indexes.size() - 1; i++) 
+        for (size_t i{0}; i < sorted_indexes.size() - 1; i++) 
             {   
-                double split_score = calculate_split_score(data, feature_idx, left_indexes, right_indexes);
-                // Dont need my indexes again so can modify in palce. "left_indexes" is a shallow copy of sorted_indexes.
-                double threshold = (data[left_indexes.back()].first[feature_idx] + data[right_indexes.back()].first[feature_idx]) / 2;
-                split_scores.push_back(std::make_pair(threshold, split_score));
+                
+                float current_feature = data[left_indexes.back()].first[feature_idx];
+
+                // Check repeated treshold.
+                if (current_feature != last_seen_feature) 
+                {
+                    // double threshold = (data[left_indexes.back()].first[feature_idx] + data[right_indexes.back()].first[feature_idx]) / 2;
+                    double threshold = (current_feature + last_seen_feature) / 2;
+                    double split_score = calculate_split_score(data, feature_idx, left_indexes, right_indexes);
+                    // std::cout<<"Accepted Threshold: "<<threshold<<" Score: "<<split_score<<std::endl;
+                    split_scores.push_back(std::make_pair(threshold, split_score));
+                    last_seen_feature = current_feature;
+                } 
                 right_indexes.push_back(left_indexes.back());
                 left_indexes.pop_back();
+
             }
         return split_scores;
     };
