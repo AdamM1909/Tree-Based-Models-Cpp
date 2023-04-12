@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:15:44
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 15:19:24
+ * @ Modified time: 2023-04-12 18:51:43
  * @ Description: Header file for the Internal_Node derived class.  
  * 
  * This class classifies a data point based on its feature and a bianry threshold.
@@ -22,6 +22,7 @@ public:
         : feature_index_(feature_index), threshold_(threshold), depth_(depth), left_child_(left_child), right_child_(right_child) {};
     virtual ~Internal_Node();
     float predict(const std::vector<float>& features) const;
+    void print(std::ostream& os) const;
 private:
     int feature_index_;
     float threshold_;

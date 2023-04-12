@@ -13,7 +13,7 @@ public:
     virtual ~Tree_Model();
     virtual void fit() = 0;
     virtual float predict(const std::vector<float>& features) const=0;
-    virtual void evaluate_test_data();
+    virtual void evaluate_test_data() const;
     std::shared_ptr<Splitter> get_splitter() const;
     std::shared_ptr<Data_Loader> get_data_loader() const;
 protected:

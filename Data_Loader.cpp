@@ -2,18 +2,16 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:31:58
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-12 17:10:13
+ * @ Modified time: 2023-04-12 18:14:54
  * @ Description: Implements fucntionality of the "Data_Loader" class.
  */
 
 #include "Data_Loader.h"
 #include "unordered_map"
 
-Data_Loader::Data_Loader(const std::string& filename, bool first_row_as_labels, float train_ratio)
+Data_Loader::Data_Loader(const std::string& filename, bool first_row_as_labels, float train_ratio = 0.8)
 {
     load_data(filename, first_row_as_labels);
-    n_labels_ = n_labels();
-    n_features_ = n_features();
     random_train_split(train_ratio);
 }
 void Data_Loader::print_data_point(int index) const
@@ -27,49 +25,6 @@ void Data_Loader::print_data_point(int index) const
         std::cout<<"] Label: "<<data_[index].second<<std::endl;
     }
 }
-// void Data_Loader::load_data(const std::string& filename, bool first_row_as_labels) 
-//     {
-//         // Load file into an input stream.
-//         std::ifstream file_stream(filename);
-//         if (!file_stream) 
-//         {
-//             std::cerr<<"Error: could not open file: "<<filename<<std::endl;
-//             return;
-//         }
-//         // Clear memory to be safe.
-//         data_.clear();
-//         // Read in.
-//         std::string line;
-//         while (std::getline(file_stream, line)) 
-//         {
-//             // Skip first row if necessary. 
-//             if (first_row_as_labels) 
-//             {
-//                 first_row_as_labels = false;
-//                 continue;
-//             }
-//             std::vector<float> row;
-//             std::stringstream line_stream(line);
-//             std::string field;
-//             // Push all features and targets (fields) into "row" as floats.
-//             while (std::getline(line_stream, field, ',')) 
-//             {
-//                 try {
-//                 float float_field = std::stof(field);
-//                 row.push_back(float_field);
-//                 } catch (const std::exception& error) {
-//                 std::cerr<<"Error: could not convert entry"<<field<<" to float. "
-//                     <<"Ensure all features and targets are numerical. Full error message: "
-//                     <<error.what()<<std::endl;
-//                 return;
-//                 }  
-//             }
-//             // Store in a STL pair template data structure.
-//             float label = row.back();
-//             row.pop_back();// Remove target from row
-//             data_.push_back(std::make_pair(row, label));
-//         }
-//     }
 void Data_Loader::load_data(const std::string& filename, bool first_row_as_labels) 
 {
     // Load file into an input stream.
@@ -84,7 +39,7 @@ void Data_Loader::load_data(const std::string& filename, bool first_row_as_label
     // Read in.
     std::string line;
     std::unordered_map<std::string, float> string_label_to_int_map;
-    int next_int_label = 1; 
+    int next_int_label = 0; 
     while (std::getline(file_stream, line)) 
     {
         // Skip first row if necessary.
@@ -126,7 +81,18 @@ void Data_Loader::load_data(const std::string& filename, bool first_row_as_label
         row.pop_back();// Remove target from row
         data_.push_back(std::make_pair(row, label)); 
     }
+
+    std::cout<<"---------------"<<std::endl;
     std::cout<<"Number of entries loaded: "<<data_.size()<<std::endl;
+
+    std::set<float> unique_labels;
+    for (auto& pair : data_) {unique_labels.insert(pair.second);}
+    
+    n_labels_ = unique_labels.size();
+    n_features_ = data_[0].first.size();
+    std::cout<<"Number of labels: "<<n_labels_<<std::endl;
+    std::cout<<"Number of features: "<<n_features_<<std::endl;
+    std::cout<<"---------------"<<std::endl;
 }
 void Data_Loader::random_train_split(float train_ratio) 
     {
@@ -144,14 +110,8 @@ void Data_Loader::random_train_split(float train_ratio)
         train_data_.insert(train_data_.begin(), data_.begin(), data_.begin() + num_train);
         test_data_.insert(test_data_.begin(), data_.begin() + num_train, data_.end());
     }
-int Data_Loader::n_labels()
-    {
-        // Set to count disticnt items.
-        std::set<float> unique_labels;
-        for (auto& pair : data_) {unique_labels.insert(pair.second);}
-        return unique_labels.size();
-    }
-int Data_Loader::n_features(){return data_[0].first.size();}
+int Data_Loader::n_labels(){return n_labels_;}
+int Data_Loader::n_features(){return  n_features_;}
 const std::vector<std::pair<std::vector<float>, float>>& Data_Loader::train_data() const {return train_data_;}
 const std::vector<std::pair<std::vector<float>, float>>& Data_Loader::bootstrapped_train_data() 
 {
