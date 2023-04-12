@@ -2,11 +2,12 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:31:58
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 16:05:17
+ * @ Modified time: 2023-04-12 17:10:13
  * @ Description: Implements fucntionality of the "Data_Loader" class.
  */
 
 #include "Data_Loader.h"
+#include "unordered_map"
 
 Data_Loader::Data_Loader(const std::string& filename, bool first_row_as_labels, float train_ratio)
 {
@@ -26,49 +27,107 @@ void Data_Loader::print_data_point(int index) const
         std::cout<<"] Label: "<<data_[index].second<<std::endl;
     }
 }
+// void Data_Loader::load_data(const std::string& filename, bool first_row_as_labels) 
+//     {
+//         // Load file into an input stream.
+//         std::ifstream file_stream(filename);
+//         if (!file_stream) 
+//         {
+//             std::cerr<<"Error: could not open file: "<<filename<<std::endl;
+//             return;
+//         }
+//         // Clear memory to be safe.
+//         data_.clear();
+//         // Read in.
+//         std::string line;
+//         while (std::getline(file_stream, line)) 
+//         {
+//             // Skip first row if necessary. 
+//             if (first_row_as_labels) 
+//             {
+//                 first_row_as_labels = false;
+//                 continue;
+//             }
+//             std::vector<float> row;
+//             std::stringstream line_stream(line);
+//             std::string field;
+//             // Push all features and targets (fields) into "row" as floats.
+//             while (std::getline(line_stream, field, ',')) 
+//             {
+//                 try {
+//                 float float_field = std::stof(field);
+//                 row.push_back(float_field);
+//                 } catch (const std::exception& error) {
+//                 std::cerr<<"Error: could not convert entry"<<field<<" to float. "
+//                     <<"Ensure all features and targets are numerical. Full error message: "
+//                     <<error.what()<<std::endl;
+//                 return;
+//                 }  
+//             }
+//             // Store in a STL pair template data structure.
+//             float label = row.back();
+//             row.pop_back();// Remove target from row
+//             data_.push_back(std::make_pair(row, label));
+//         }
+//     }
 void Data_Loader::load_data(const std::string& filename, bool first_row_as_labels) 
+{
+    // Load file into an input stream.
+    std::ifstream file_stream(filename);
+    if (!file_stream) 
     {
-        // Load file into an input stream.
-        std::ifstream file_stream(filename);
-        if (!file_stream) 
+        std::cerr<<"Error: could not open file: "<<filename<<std::endl;
+        return;
+    }
+    // Clear memory to be safe.
+    data_.clear();
+    // Read in.
+    std::string line;
+    std::unordered_map<std::string, float> string_label_to_int_map;
+    int next_int_label = 1; 
+    while (std::getline(file_stream, line)) 
+    {
+        // Skip first row if necessary.
+        if (first_row_as_labels) 
         {
-            std::cerr<<"Error: could not open file: "<<filename<<std::endl;
-            return;
+            first_row_as_labels = false;
+            continue;
         }
-        // Clear memory to be safe.
-        data_.clear();
-        // Read in.
-        std::string line;
-        while (std::getline(file_stream, line)) 
+        std::vector<float> row;
+        std::stringstream line_stream(line);
+        std::string field;
+        // Try push all features and targets (fields) into "row" as floats.
+        while (std::getline(line_stream, field, ',')) 
         {
-            // Skip first row if necessary. 
-            if (first_row_as_labels) 
-            {
-                first_row_as_labels = false;
-                continue;
-            }
-            std::vector<float> row;
-            std::stringstream line_stream(line);
-            std::string field;
-            // Push all features and targets (fields) into "row" as floats.
-            while (std::getline(line_stream, field, ',')) 
-            {
-                try {
+            try {
                 float float_field = std::stof(field);
                 row.push_back(float_field);
-                } catch (const std::exception& error) {
-                std::cerr<<"Error: could not convert entry"<<field<<" to float. "
-                    <<"Ensure all features and targets are numerical. Full error message: "
-                    <<error.what()<<std::endl;
-                return;
-                }  
+            } catch (const std::exception& error) {
+                // If the last field is a string, convert it to an integer label else its a string feature so output an error.
+                if (!line_stream.good()) 
+                {
+                    if (string_label_to_int_map.count(field)) {{};} 
+                    else {
+                        string_label_to_int_map[field] = next_int_label;
+                        std::cout << "String label "<<field<<" corresponds to numerical label: "<<next_int_label<<std::endl;
+                        next_int_label++;
+                    }
+                    // Now this can be pushed into the row vector. 
+                    row.push_back(string_label_to_int_map[field]);
+                } else { 
+                    std::cerr<<"Error: check your features are numerical with no nans. "<<field<<" cannot be converted to a float."<<std::endl;
+                    return;
+                }
             }
-            // Store in a STL pair template data structure.
-            float label = row.back();
-            row.pop_back();// Remove target from row
-            data_.push_back(std::make_pair(row, label));
+         
         }
+        // Store in a STL pair template data structure.
+        float label = row.back();
+        row.pop_back();// Remove target from row
+        data_.push_back(std::make_pair(row, label)); 
     }
+    std::cout<<"Number of entries loaded: "<<data_.size()<<std::endl;
+}
 void Data_Loader::random_train_split(float train_ratio) 
     {
         // Get a psudorandom shuffle with a time based seed. 

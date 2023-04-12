@@ -10,11 +10,12 @@ Tree_Model::Tree_Model(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr
 Tree_Model::~Tree_Model() {};
 void Tree_Model::evaluate_test_data() 
 {
+    std::cout<<"here."<<std::endl;
     std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels(), std::vector<int>(data_loader_->n_labels(), 0));
     int num_correct{0};
     if (data_loader_->test_data().size() == 0)
     {
-        std::cout << "There are no data points in the test set to evaluate."<<std::endl;
+        std::cout<<"There are no data points in the test set to evaluate."<<std::endl;
         return;
     }
 
@@ -27,7 +28,7 @@ void Tree_Model::evaluate_test_data()
         confusion_matrix[predicted_label][true_label]++;
     }
     double accuracy = static_cast<double>(num_correct) / static_cast<double>(data_loader_->test_data().size());
-    std::cout<<"Test Data Accuracy: "<<accuracy<<std::endl;
+    std::cout<<"Test Data Accuracy xxxx: "<<accuracy<<std::endl;
     std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
     std::cout<<"Test Data Confusion matrix:\n "<< std::endl;
 
