@@ -18,8 +18,6 @@ public:
     void set_depth(int depth) {
         depth_ = depth;
     }
-    
-protected:
     virtual void print(std::ostream& os) const = 0;
     int depth_;
 };
@@ -37,7 +35,6 @@ public:
         }
     }
     
-protected:
     void print(std::ostream& os) const override {
         os << "Internal node (depth=" << depth_ << "): feature_index=" << feature_index_ << ", threshold=" << threshold_ << "\n";
         os << "    " << *(left_child_) << "\n";
@@ -59,7 +56,6 @@ public:
         return value_;
     }
     
-protected:
     void print(std::ostream& os) const override {
         os << "Leaf node (depth=" << depth_ << "): value=" << value_;
     }
@@ -68,10 +64,27 @@ private:
     float value_;
 };
 
+class Decision_Tree 
+{
+    public: 
+        Decision_Tree(Node* provide_root) : root(provide_root) {};
+        friend std::ostream& operator<<(std::ostream& os, const Decision_Tree& decision_tree) 
+        {
+            decision_tree.root->print(os);
+            return os;
+        }
+    private:
+    Node* root;
+};
+
 int main() {
     Node* root = new InternalNode(2.5, 0,
     new InternalNode(1.5, 1, new LeafNode(1.0), new LeafNode(2.0)),
     new InternalNode(3.5, 1, new LeafNode(3.0), new LeafNode(4.0)));
 root->set_depth(0);
 std::cout<<*(root)<<std::endl;
+Decision_Tree dt1(root);
+std::cout<<dt1<<std::endl;
 }
+
+

@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:07:04
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-12 18:40:19
+ * @ Modified time: 2023-04-12 19:27:39
  * @ Description: Header file for the Node base class. 
  * 
  * Node objects derived from this base class are sued to build decesion trees.

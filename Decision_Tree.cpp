@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 17:42:31
+ * @ Modified time: 2023-04-12 19:46:58
  * @ Description: Implementation of the Decision_Tree class.
  */
 
@@ -23,6 +23,17 @@ void Decision_Tree::fit()
                               : recursively_build_tree(data_loader_->train_data(), 0);  
 }
 float Decision_Tree::predict(const std::vector<float>& features) const {return root_->predict(features);}
+std::ostream& operator<<(std::ostream& os, const Decision_Tree& decision_tree) 
+{
+    if (decision_tree.root_!= nullptr) 
+    {
+        decision_tree.root_->print(os);
+        return os;
+    } else {
+        os<<"Root is a null ptr so can't print";
+        return os; 
+    }
+}
 void Decision_Tree::evaluate_test_data()
 {
     std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels(), std::vector<int>(data_loader_->n_labels(), 0));
