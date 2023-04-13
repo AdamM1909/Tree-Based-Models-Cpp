@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 13:59:34
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 17:41:54
+ * @ Modified time: 2023-04-13 17:35:28
  * @ Description: Header file for the Random_Forest class.
  * 
  * This class has access via a shared pointer to a Data_Loader and Splitter object
@@ -23,8 +23,8 @@
 class Random_Forest : public Tree_Model
 {
 public:
-    Random_Forest(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, 
-            int num_trees, int max_tree_depth, int min_samples_split);
+    Random_Forest(std::shared_ptr<Data_Loader> data_loader, const std::shared_ptr<Splitter> splitter, 
+            const int num_trees, const int max_tree_depth, const int min_samples_split);
     ~Random_Forest();
     virtual void fit() override;
     virtual float predict(const std::vector<float>& features) const;

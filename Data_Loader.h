@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:28:47
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 16:05:53
+ * @ Modified time: 2023-04-13 17:33:22
  * @ Description: Header file for the Data_Loader class. 
  * 
  * Data is expected to have numerical features [x_n, ..., x_n] and have a numerical categorical label y.
@@ -34,24 +34,24 @@
 class Data_Loader 
 {
 public:
-    Data_Loader(const std::string& filename, bool first_row_as_labels, float train_ratio);
+    Data_Loader(const std::string& filename,const bool first_row_as_labels, float train_ratio);
     void print_data_point(int index) const;
-    const std::vector<std::pair<std::vector<float>, float>>& train_data() const;
-    const std::vector<std::pair<std::vector<float>, float>>& bootstrapped_train_data();
-    const std::vector<std::pair<std::vector<float>, float>>& test_data() const;
-    const std::vector<std::pair<std::vector<float>, float>>& data() const;
+    const std::vector<std::pair<std::vector<float>, int>>& train_data() const;
+    const std::vector<std::pair<std::vector<float>, int>>& bootstrapped_train_data();
+    const std::vector<std::pair<std::vector<float>, int>>& test_data() const;
+    const std::vector<std::pair<std::vector<float>, int>>& data() const;
     int n_labels();
     int n_features();
 private:
-    std::vector<std::pair<std::vector<float>, float>> data_; 
-    std::vector<std::pair<std::vector<float>, float>> train_data_;
-    std::vector<std::pair<std::vector<float>, float>> bootstrapped_train_data_;
-    std::vector<std::pair<std::vector<float>, float>> test_data_;
+    std::vector<std::pair<std::vector<float>, int>> data_; 
+    std::vector<std::pair<std::vector<float>, int>> train_data_;
+    std::vector<std::pair<std::vector<float>, int>> bootstrapped_train_data_;
+    std::vector<std::pair<std::vector<float>, int>> test_data_;
 
     int n_labels_;
     int n_features_;
     void load_data(const std::string& filename, bool first_row_as_labels);
-    void random_train_split(float train_ratio);
+    void random_train_split(const float train_ratio);
     void create_bootstrapped_train_data();
 };
 #endif

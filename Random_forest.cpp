@@ -2,15 +2,15 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-10 14:58:54
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-11 17:40:10
+ * @ Modified time: 2023-04-13 17:35:54
  * @ Description: Implementation of the Random_Forest derived class.
  */
 
 #include "Random_Forest.h"
 #include "Tree_Model.h"
 
-Random_Forest::Random_Forest(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, 
-                int num_trees, int max_tree_depth, int min_samples_split) :
+Random_Forest::Random_Forest(std::shared_ptr<Data_Loader> data_loader,const std::shared_ptr<Splitter> splitter, 
+                const int num_trees, const int max_tree_depth, const int min_samples_split) :
                 Tree_Model(data_loader, splitter, max_tree_depth, min_samples_split),
                 num_trees_(num_trees) {}
 Random_Forest::~Random_Forest() {};

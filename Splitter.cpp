@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-08 14:45:09
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:26:06
+ * @ Modified time: 2023-04-13 17:33:47
  * @ Description: Implementation of the Splitter base class.
  */
 #include "Splitter.h"
@@ -10,7 +10,7 @@
 #include <limits>
 
 Splitter::~Splitter() {};
-std::vector<size_t> Splitter::sort_by_feature(const std::vector<std::pair<std::vector<float>, float>>& data, size_t feature_idx)
+std::vector<size_t> Splitter::sort_by_feature(const std::vector<std::pair<std::vector<float>, int>>& data, size_t feature_idx)
 {
     // Sort on feature without deep copying the data.
     std::vector<size_t> sorted_indices(data.size());
@@ -19,7 +19,7 @@ std::vector<size_t> Splitter::sort_by_feature(const std::vector<std::pair<std::v
         {return data[a].first[feature_idx] < data[b].first[feature_idx];});
     return sorted_indices;
 }
-double Splitter::calculate_split_score(const std::vector<std::pair<std::vector<float>, float>>& data, const size_t feature_idx, const std::vector<size_t> left_indexes, 
+double Splitter::calculate_split_score(const std::vector<std::pair<std::vector<float>, int>>& data, const size_t feature_idx, const std::vector<size_t> left_indexes, 
                                     const std::vector<size_t> right_indexes)
     {
         double left_score = calculate_node_score(data, left_indexes);
@@ -27,7 +27,7 @@ double Splitter::calculate_split_score(const std::vector<std::pair<std::vector<f
         double split_score = (left_score * left_indexes.size() + right_score * right_indexes.size()) / data.size();
         return split_score;
     }
-std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const std::vector<std::pair<std::vector<float>, float>>& data, 
+std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const std::vector<std::pair<std::vector<float>, int>>& data, 
     const size_t feature_idx, std::vector<size_t> sorted_indexes)
     {
         // Find the best split for this feature based on the criterion. 
@@ -63,7 +63,7 @@ std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const st
             }
         return split_scores;
     };
-std::pair<size_t, float> Splitter::find_best_split(const std::vector<std::pair<std::vector<float>, float>>& data)
+std::pair<size_t, float> Splitter::find_best_split(const std::vector<std::pair<std::vector<float>, int>>& data)
 {
     std::vector<size_t> sorted_indexes(data.size());
     std::vector<std::pair<double, double>> splits_scores(data.size() - 1);
@@ -102,13 +102,13 @@ size_t Splitter::minimum_score(const std::vector<std::pair<double, double>>& vec
     }
     return min_index;
 }
-int Splitter::calc_n_labels(const std::vector<std::pair<std::vector<float>, float>>& data)
+int Splitter::calc_n_labels(const std::vector<std::pair<std::vector<float>, int>>& data)
     {
         std::set<float> unique_labels;
         for (const auto& pair : data) {unique_labels.insert(pair.second);}
         return unique_labels.size();
     }
-std::unordered_map<int, std::size_t> Splitter::label_counts(const std::vector<std::pair<std::vector<float>, float>>& data, const std::vector<size_t> indexes) const
+std::unordered_map<int, std::size_t> Splitter::label_counts(const std::vector<std::pair<std::vector<float>, int>>& data, const std::vector<size_t> indexes) const
     {
         std::unordered_map<int, std::size_t> label_count_map;
         for (const auto& idx : indexes) {label_count_map[data[idx].second]++;}

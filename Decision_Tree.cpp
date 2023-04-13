@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 11:06:15
+ * @ Modified time: 2023-04-13 17:36:19
  * @ Description: Implementation of the Decision_Tree class.
  */
 
@@ -13,8 +13,8 @@
 #include "Leaf_Node.h"
 #include <memory>
 
-Decision_Tree::Decision_Tree(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, bool boostrapped_data,
-                        int max_tree_depth, int min_samples_split) :
+Decision_Tree::Decision_Tree(std::shared_ptr<Data_Loader> data_loader, const std::shared_ptr<Splitter> splitter, bool boostrapped_data,
+                        const int max_tree_depth, const int min_samples_split) :
                         Tree_Model(data_loader, splitter, max_tree_depth, min_samples_split), 
                         root_(nullptr) {};
 Decision_Tree::~Decision_Tree() {}//delete root_;}
@@ -74,7 +74,7 @@ void Decision_Tree::evaluate_test_data()
     }
     std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
 }
-bool Decision_Tree::is_pure_node(const std::vector<std::pair<std::vector<float>, float>>& data) 
+bool Decision_Tree::is_pure_node(const std::vector<std::pair<std::vector<float>, int>>& data) 
 {
     float pure_class{data[0].second}; 
     for (const auto& data_point : data) 
@@ -83,14 +83,14 @@ bool Decision_Tree::is_pure_node(const std::vector<std::pair<std::vector<float>,
     }
     return true; 
 };
- std::unordered_map<int, std::size_t> Decision_Tree::label_counts(const std::vector<std::pair<std::vector<float>, float>>& data) const
+ std::unordered_map<int, std::size_t> Decision_Tree::label_counts(const std::vector<std::pair<std::vector<float>, int>>& data) const
 {
     std::unordered_map<int, std::size_t> label_count_map;
     std::for_each(data.begin(), data.end(), [&label_count_map](const std::pair<std::vector<float>, float>& pair) {
         label_count_map[pair.second]++;});
     return label_count_map;
 };
-float Decision_Tree::majority_vote_classify(const std::vector<std::pair<std::vector<float>, float>>& data)
+float Decision_Tree::majority_vote_classify(const std::vector<std::pair<std::vector<float>, int>>& data)
 {
     float majority_label{0};
     std::size_t max_count{0};
@@ -105,12 +105,12 @@ float Decision_Tree::majority_vote_classify(const std::vector<std::pair<std::vec
     }
     return majority_label;
 }
-bool Decision_Tree::is_valid_leaf(const std::vector<std::pair<std::vector<float>, float>>& data, int depth) 
+bool Decision_Tree::is_valid_leaf(const std::vector<std::pair<std::vector<float>, int>>& data, int depth) 
 {
     bool pure = is_pure_node(data);
     return (depth >= max_tree_depth_ || data.size() < min_samples_split_ || pure) ? true : false;
 }
-std::unique_ptr<Node> Decision_Tree::recursively_build_tree(const std::vector<std::pair<std::vector<float>, float>>& data, int depth) 
+std::unique_ptr<Node> Decision_Tree::recursively_build_tree(const std::vector<std::pair<std::vector<float>, int>>& data, int depth) 
 {
     if (is_valid_leaf(data, depth)) {return std::unique_ptr<Node>(new Leaf_Node(majority_vote_classify(data), depth));}
     std::pair<size_t, float> best_split = splitter_->find_best_split(data);
@@ -118,8 +118,8 @@ std::unique_ptr<Node> Decision_Tree::recursively_build_tree(const std::vector<st
     float threshold = best_split.second;
     
     // Split data
-    std::vector<std::pair<std::vector<float>, float>> left_data;
-    std::vector<std::pair<std::vector<float>, float>> right_data;
+    std::vector<std::pair<std::vector<float>, int>> left_data;
+    std::vector<std::pair<std::vector<float>, int>> right_data;
     for (const auto& data_point : data) 
     {
         (data_point.first[feature_idx] <= threshold) ? left_data.push_back(data_point) : right_data.push_back(data_point);

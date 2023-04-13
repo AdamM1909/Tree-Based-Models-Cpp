@@ -2,19 +2,19 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:31:58
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:15:22
+ * @ Modified time: 2023-04-13 17:32:03
  * @ Description: Implements fucntionality of the "Data_Loader" class.
  */
 
 #include "Data_Loader.h"
 #include "unordered_map"
 
-Data_Loader::Data_Loader(const std::string& filename, bool first_row_as_labels, float train_ratio = 0.8)
+Data_Loader::Data_Loader(const std::string& filename, const bool first_row_as_labels, const float train_ratio)
 {
     load_data(filename, first_row_as_labels);
     random_train_split(train_ratio);
 }
-void Data_Loader::print_data_point(int index) const
+void Data_Loader::print_data_point(const int index) const
 {
     if (index < 0 || index >= data_.size()) {
         std::cout<<"Index out of bounds."<<std::endl;
@@ -77,7 +77,7 @@ void Data_Loader::load_data(const std::string& filename, bool first_row_as_label
          
         }
         // Store in a STL pair template data structure.
-        float label = row.back();
+        int label = static_cast<int>(row.back());
         row.pop_back();// Remove target from row
         data_.push_back(std::make_pair(row, label)); 
     }
@@ -94,7 +94,7 @@ void Data_Loader::load_data(const std::string& filename, bool first_row_as_label
     std::cout<<"Number of features: "<<n_features_<<std::endl;
     std::cout<<"---------------"<<std::endl;
 }
-void Data_Loader::random_train_split(float train_ratio) 
+void Data_Loader::random_train_split(const float train_ratio) 
     {
         // Get a psudorandom shuffle with a time based seed. 
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -114,14 +114,14 @@ void Data_Loader::random_train_split(float train_ratio)
     }
 int Data_Loader::n_labels(){return n_labels_;}
 int Data_Loader::n_features(){return  n_features_;}
-const std::vector<std::pair<std::vector<float>, float>>& Data_Loader::train_data() const {return train_data_;}
-const std::vector<std::pair<std::vector<float>, float>>& Data_Loader::bootstrapped_train_data() 
+const std::vector<std::pair<std::vector<float>, int>>& Data_Loader::train_data() const {return train_data_;}
+const std::vector<std::pair<std::vector<float>, int>>& Data_Loader::bootstrapped_train_data() 
 {
     create_bootstrapped_train_data();
     return bootstrapped_train_data_;
 }
-const std::vector<std::pair<std::vector<float>, float>>& Data_Loader::test_data() const {return test_data_;}
-const std::vector<std::pair<std::vector<float>, float>>& Data_Loader::data() const {return data_;}
+const std::vector<std::pair<std::vector<float>, int>>& Data_Loader::test_data() const {return test_data_;}
+const std::vector<std::pair<std::vector<float>, int>>& Data_Loader::data() const {return data_;}
 void Data_Loader::create_bootstrapped_train_data() 
 {
     // Get a psudorandom shuffle with a time based seed. 
