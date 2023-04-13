@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:36:19
+ * @ Modified time: 2023-04-13 17:37:43
  * @ Description: Implementation of the Decision_Tree class.
  */
 
@@ -76,7 +76,7 @@ void Decision_Tree::evaluate_test_data()
 }
 bool Decision_Tree::is_pure_node(const std::vector<std::pair<std::vector<float>, int>>& data) 
 {
-    float pure_class{data[0].second}; 
+    int pure_class{data[0].second}; 
     for (const auto& data_point : data) 
     {
         if (data_point.second != pure_class) {return false;}
