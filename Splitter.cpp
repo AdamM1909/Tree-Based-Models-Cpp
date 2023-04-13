@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-08 14:45:09
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:14:30
+ * @ Modified time: 2023-04-13 17:26:06
  * @ Description: Implementation of the Splitter base class.
  */
 #include "Splitter.h"
@@ -111,10 +111,6 @@ int Splitter::calc_n_labels(const std::vector<std::pair<std::vector<float>, floa
 std::unordered_map<int, std::size_t> Splitter::label_counts(const std::vector<std::pair<std::vector<float>, float>>& data, const std::vector<size_t> indexes) const
     {
         std::unordered_map<int, std::size_t> label_count_map;
-        for (const auto& idx : indexes) 
-        {
-            auto pair = data[idx];
-            label_count_map[pair.second]++;
-        }
+        for (const auto& idx : indexes) {label_count_map[data[idx].second]++;}
         return label_count_map;
     };
