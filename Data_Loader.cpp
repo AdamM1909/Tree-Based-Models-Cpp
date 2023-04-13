@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:31:58
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-12 18:14:54
+ * @ Modified time: 2023-04-13 17:15:22
  * @ Description: Implements fucntionality of the "Data_Loader" class.
  */
 
@@ -109,6 +109,8 @@ void Data_Loader::random_train_split(float train_ratio)
         // User vector class fucntion "instert" to allocate
         train_data_.insert(train_data_.begin(), data_.begin(), data_.begin() + num_train);
         test_data_.insert(test_data_.begin(), data_.begin() + num_train, data_.end());
+        std::cout<<"The train data set has "<<train_data_.size()<< "entries."<<"\n";
+        std::cout<<"The test data set has "<<test_data_.size()<< "entries."<<std::endl;
     }
 int Data_Loader::n_labels(){return n_labels_;}
 int Data_Loader::n_features(){return  n_features_;}
