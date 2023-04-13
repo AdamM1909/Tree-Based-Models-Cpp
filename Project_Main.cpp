@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-12 20:43:32
+ * @ Modified time: 2023-04-13 10:56:03
  * @ Description: Fits a decision tree and a radnom forest to a data set printing out the test accuracy and the confusion matricies.
  * 
  * Run with g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Node.cpp, Internal_Node.cpp, Leaf_Node.cpp, Tree_Model.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp
@@ -53,7 +53,7 @@ int main()
     // gini_splitter->find_best_split(data_loader->train_data());
 
     // Decision Tree
-    int max_tree_depth{1000};
+    int max_tree_depth{3};
     int min_split_num{2};
     bool train_DT_on_bootsrapped_data{false};
     std::cout<<"Decision tree: \n"<<std::endl;

@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:37:37
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-12 20:28:36
+ * @ Modified time: 2023-04-13 11:01:29
  * @ Description: Header file for the Decision_Tree class.
  * 
  * This class has access via a shared pointer to a Data_Loader and Splitter object
@@ -35,12 +35,12 @@ public:
     void evaluate_test_data();
 private:
     // Node* root_;
-    std::shared_ptr<Node> root_;
+    std::unique_ptr<Node> root_;
     bool boostrapped_data_;
     bool is_pure_node(const std::vector<std::pair<std::vector<float>, float>>& data);
     bool is_valid_leaf(const std::vector<std::pair<std::vector<float>, float>>& data, int depth);
     std::unordered_map<int, std::size_t> label_counts(const std::vector<std::pair<std::vector<float>, float>>& data) const;
     float majority_vote_classify(const std::vector<std::pair<std::vector<float>, float>>& data);
-    std::shared_ptr<Node> recursively_build_tree(const std::vector<std::pair<std::vector<float>, float>>& data, int depth);
+    std::unique_ptr<Node> recursively_build_tree(const std::vector<std::pair<std::vector<float>, float>>& data, int depth);
 };
 #endif
