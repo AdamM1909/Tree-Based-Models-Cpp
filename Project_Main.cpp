@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 10:28:06
+ * @ Modified time: 2023-04-14 10:38:02
  * @ Description: Fits a decision tree and a radnom forest to a data set printing out the test accuracy and the confusion matricies.
  * 
  * Run with g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Node.cpp, Internal_Node.cpp, Leaf_Node.cpp, Tree_Model.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp

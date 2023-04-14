@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-08 14:45:09
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 10:25:33
+ * @ Modified time: 2023-04-14 10:31:40
  * @ Description: Implementation of the Splitter base class.
  */
 #include "Splitter.h"
@@ -19,14 +19,6 @@ std::vector<size_t> Splitter::sort_by_feature(const std::vector<std::pair<std::v
         {return data[a].first[feature_idx] < data[b].first[feature_idx];});
     return sorted_indices;
 }
-double Splitter::calculate_split_score(const std::vector<std::pair<std::vector<float>, int>>& data, const size_t feature_idx, const std::vector<size_t> left_indexes, 
-                                    const std::vector<size_t> right_indexes)
-    {
-        double left_score = calculate_node_score(data, left_indexes);
-        double right_score = calculate_node_score(data, right_indexes);
-        double split_score = (left_score * left_indexes.size() + right_score * right_indexes.size()) / data.size();
-        return split_score;
-    }
 std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const std::vector<std::pair<std::vector<float>, int>>& data, const size_t feature_idx, std::vector<size_t> sorted_indexes)
 {
     std::vector<std::pair<double, double>> split_scores;
@@ -64,42 +56,6 @@ std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const st
 
     return split_scores;
 }
-
-// std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const std::vector<std::pair<std::vector<float>, int>>& data, 
-//     const size_t feature_idx, std::vector<size_t> sorted_indexes)
-//     {
-//         // Find the best split for this feature based on the criterion. 
-//         std::vector<std::pair<double, double>> split_scores;
-//         split_scores.reserve(data.size());
-//         // Set up [left ... | ... right] split data structure and slide the split along the ordered indexes.
-//         std::vector<size_t> left_indexes = sorted_indexes;
-//         std::vector<size_t> right_indexes = {};
-//         right_indexes.push_back(left_indexes.back());
-//         left_indexes.pop_back();
-//         // Set up a check variable to ensure each threshold is only checked once.
-//         // double last_threshold = std::numeric_limits<double>::quiet_NaN();
-//         float last_seen_feature = data[right_indexes.back()].first[feature_idx];
-
-//         // Iterate through all splits.
-//         for (size_t i{0}; i < sorted_indexes.size() - 1; i++) 
-//             {   
-                
-//                 float current_feature = data[left_indexes.back()].first[feature_idx];
-
-//                 // Check repeated treshold.
-//                 if (current_feature != last_seen_feature) 
-//                 {
-//                     double threshold = (current_feature + last_seen_feature) / 2;
-//                     double split_score = calculate_split_score(data, feature_idx, left_indexes, right_indexes);
-//                     split_scores.push_back(std::make_pair(threshold, split_score));
-//                     last_seen_feature = current_feature;
-//                 } 
-//                 right_indexes.push_back(left_indexes.back());
-//                 left_indexes.pop_back();
-
-//             }
-//         return split_scores;
-//     };
 std::pair<size_t, float> Splitter::find_best_split(const std::vector<std::pair<std::vector<float>, int>>& data)
 {
     std::vector<size_t> sorted_indexes(data.size());
