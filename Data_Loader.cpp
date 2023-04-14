@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:31:58
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:32:03
+ * @ Modified time: 2023-04-13 19:32:58
  * @ Description: Implements fucntionality of the "Data_Loader" class.
  */
 
@@ -57,7 +57,7 @@ void Data_Loader::load_data(const std::string& filename, bool first_row_as_label
             try {
                 float float_field = std::stof(field);
                 row.push_back(float_field);
-            } catch (const std::exception& error) {
+            } catch (const std::invalid_argument& error) {
                 // If the last field is a string, convert it to an integer label else its a string feature so output an error.
                 if (!line_stream.good()) 
                 {
@@ -70,7 +70,7 @@ void Data_Loader::load_data(const std::string& filename, bool first_row_as_label
                     // Now this can be pushed into the row vector. 
                     row.push_back(string_label_to_int_map[field]);
                 } else { 
-                    std::cerr<<"Error: check your features are numerical with no nans. "<<field<<" cannot be converted to a float."<<std::endl;
+                    std::cerr<<"Cannot load data. Check all features are numerical. Error: "<<field<<" cannot be converted to a float."<<std::endl;
                     return;
                 }
             }
@@ -109,8 +109,8 @@ void Data_Loader::random_train_split(const float train_ratio)
         // User vector class fucntion "instert" to allocate
         train_data_.insert(train_data_.begin(), data_.begin(), data_.begin() + num_train);
         test_data_.insert(test_data_.begin(), data_.begin() + num_train, data_.end());
-        std::cout<<"The train data set has "<<train_data_.size()<< "entries."<<"\n";
-        std::cout<<"The test data set has "<<test_data_.size()<< "entries."<<std::endl;
+        std::cout<<"The train data set has "<<train_data_.size()<<" entries."<<"\n";
+        std::cout<<"The test data set has "<<test_data_.size()<<" entries."<<std::endl;
     }
 int Data_Loader::n_labels(){return n_labels_;}
 int Data_Loader::n_features(){return  n_features_;}

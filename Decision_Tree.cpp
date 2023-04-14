@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:37:43
+ * @ Modified time: 2023-04-13 19:16:06
  * @ Description: Implementation of the Decision_Tree class.
  */
 
@@ -105,10 +105,10 @@ float Decision_Tree::majority_vote_classify(const std::vector<std::pair<std::vec
     }
     return majority_label;
 }
-bool Decision_Tree::is_valid_leaf(const std::vector<std::pair<std::vector<float>, int>>& data, int depth) 
+bool Decision_Tree::is_valid_leaf(const std::vector<std::pair<std::vector<float>, int>>& data, const int depth) 
 {
     bool pure = is_pure_node(data);
-    return (depth >= max_tree_depth_ || data.size() < min_samples_split_ || pure) ? true : false;
+    return (depth >= max_tree_depth_ || data.size() <= min_samples_split_ || pure) ? true : false;
 }
 std::unique_ptr<Node> Decision_Tree::recursively_build_tree(const std::vector<std::pair<std::vector<float>, int>>& data, int depth) 
 {

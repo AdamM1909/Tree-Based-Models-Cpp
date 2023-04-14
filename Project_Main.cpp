@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:18:42
+ * @ Modified time: 2023-04-14 10:28:06
  * @ Description: Fits a decision tree and a radnom forest to a data set printing out the test accuracy and the confusion matricies.
  * 
  * Run with g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Node.cpp, Internal_Node.cpp, Leaf_Node.cpp, Tree_Model.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp
@@ -29,7 +29,7 @@ int main()
     // std::string file_name{"breast_cancer_data_set_string_labels_no_header.csv"};
     std::string file_name{"waveform-5000_csv.csv"};
     // std::string file_name{"test_data_set.txt"};
-    float train_fraction{0.1};
+    float train_fraction{0.8};
     bool exclude_first_row{true};
     std::shared_ptr<Data_Loader> data_loader = std::make_shared<Data_Loader>(file_name, exclude_first_row, train_fraction);
     std::shared_ptr<Splitter> gini_splitter = std::make_shared<Gini_Splitter>();
@@ -54,7 +54,7 @@ int main()
     // gini_splitter->find_best_split(data_loader->train_data());
 
     // Decision Tree
-    int max_tree_depth{10};
+    int max_tree_depth{1000};
     int min_split_num{2};
     bool train_DT_on_bootsrapped_data{false};
     std::cout<<"Decision tree: \n"<<std::endl;

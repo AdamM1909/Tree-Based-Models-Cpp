@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:28:47
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:33:22
+ * @ Modified time: 2023-04-13 19:19:21
  * @ Description: Header file for the Data_Loader class. 
  * 
  * Data is expected to have numerical features [x_n, ..., x_n] and have a numerical categorical label y.
@@ -47,7 +47,6 @@ private:
     std::vector<std::pair<std::vector<float>, int>> train_data_;
     std::vector<std::pair<std::vector<float>, int>> bootstrapped_train_data_;
     std::vector<std::pair<std::vector<float>, int>> test_data_;
-
     int n_labels_;
     int n_features_;
     void load_data(const std::string& filename, bool first_row_as_labels);

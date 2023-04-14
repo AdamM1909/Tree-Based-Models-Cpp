@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 09:25:05
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:33:38
+ * @ Modified time: 2023-04-14 10:17:48
  * @ Description: Header file for the Splitter base class. 
  * 
  * Splitter objects derived from this base class find the optimal feature and feature threshold
@@ -34,8 +34,8 @@ public:
                 const size_t feature_idx, std::vector<size_t> sorted_indexes);
         std::pair<size_t, float> find_best_split(const std::vector<std::pair<std::vector<float>, int>>& data);
         size_t minimum_score(const std::vector<std::pair<double, double>>& vec);
-        int calc_n_labels(const std::vector<std::pair<std::vector<float>, int>>& data);
         std::unordered_map<int, size_t> label_counts(const std::vector<std::pair<std::vector<float>, int>>& data, const std::vector<size_t> indexes) const;
+        virtual double calculate_node_score_from_label_counts(const std::unordered_map<int, size_t>& label_counts_map, const size_t n_data_points) const=0;
 };
 #endif
 

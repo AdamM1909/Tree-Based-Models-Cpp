@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 11:36:17
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:34:15
+ * @ Modified time: 2023-04-13 17:44:59
  * @ Description: Header file for the Entropy_Splitter derived class.
  * 
  * This class inherets all the utility functions of the Splitter base class 
@@ -19,7 +19,7 @@ double Entropy_Splitter::calculate_node_score(const std::vector<std::pair<std::v
             std::unordered_map<int, std::size_t> label_counts_map = label_counts(data, indexes);
             double n_data_points = indexes.size();
             double entropy = 0;
-            for (auto count : label_counts_map) 
+            for (const auto count : label_counts_map) 
             {
                 double p = count.second / n_data_points;
                 entropy += p*std::log(p);
