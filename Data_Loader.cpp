@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-07 16:31:58
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 19:32:58
+ * @ Modified time: 2023-04-14 19:10:21
  * @ Description: Implements fucntionality of the "Data_Loader" class.
  */
 
@@ -111,6 +111,7 @@ void Data_Loader::random_train_split(const float train_ratio)
         test_data_.insert(test_data_.begin(), data_.begin() + num_train, data_.end());
         std::cout<<"The train data set has "<<train_data_.size()<<" entries."<<"\n";
         std::cout<<"The test data set has "<<test_data_.size()<<" entries."<<std::endl;
+        std::cout<<"---------------"<<std::endl;
     }
 int Data_Loader::n_labels(){return n_labels_;}
 int Data_Loader::n_features(){return  n_features_;}
@@ -121,7 +122,6 @@ const std::vector<std::pair<std::vector<float>, int>>& Data_Loader::bootstrapped
     return bootstrapped_train_data_;
 }
 const std::vector<std::pair<std::vector<float>, int>>& Data_Loader::test_data() const {return test_data_;}
-const std::vector<std::pair<std::vector<float>, int>>& Data_Loader::data() const {return data_;}
 void Data_Loader::create_bootstrapped_train_data() 
 {
     // Get a psudorandom shuffle with a time based seed. 

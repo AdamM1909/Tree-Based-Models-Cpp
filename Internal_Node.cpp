@@ -2,12 +2,14 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:15:55
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-12 20:44:16
+ * @ Modified time: 2023-04-14 14:07:13
  * @ Description: Implementation of the Internal Node derived class.
  */
 
 #include "Internal_Node.h"
-
+Internal_Node::Internal_Node(int feature_index, float threshold, std::unique_ptr<Node> left_child, std::unique_ptr<Node> right_child, int depth)
+        : feature_index_(feature_index), threshold_(threshold), depth_(depth), left_child_(std::move(left_child)), 
+          right_child_(std::move(right_child)) {};
 Internal_Node::~Internal_Node() {}
 float Internal_Node::predict(const std::vector<float>& features) const 
 {

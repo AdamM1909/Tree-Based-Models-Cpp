@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-08 14:45:09
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 10:31:40
+ * @ Modified time: 2023-04-14 19:58:08
  * @ Description: Implementation of the Splitter base class.
  */
 #include "Splitter.h"
@@ -19,25 +19,26 @@ std::vector<size_t> Splitter::sort_by_feature(const std::vector<std::pair<std::v
         {return data[a].first[feature_idx] < data[b].first[feature_idx];});
     return sorted_indices;
 }
-std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const std::vector<std::pair<std::vector<float>, int>>& data, const size_t feature_idx, std::vector<size_t> sorted_indexes)
+std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const std::vector<std::pair<std::vector<float>, int>>& data, const size_t feature_idx, 
+                                                                        std::vector<size_t> sorted_indexes, bool verbose)
 {
     std::vector<std::pair<double, double>> split_scores;
     split_scores.reserve(data.size());
 
     std::unordered_map<int, size_t> left_label_counts;
-    std::unordered_map<int, std::size_t> right_label_counts = label_counts(data, sorted_indexes);
+    std::unordered_map<int, size_t> right_label_counts = count_labels(data, sorted_indexes);
 
-    float last_seen_feature = data[sorted_indexes.back()].first[feature_idx];
+    // Start the loop from [T_1|...T_n]
+    float last_seen_feature = data[sorted_indexes[0]].first[feature_idx];
+    left_label_counts[data[sorted_indexes[0]].second]++;
+    right_label_counts[data[sorted_indexes[0]].second]--;
 
-    for (size_t i{0}; i < sorted_indexes.size() - 1; i++) 
+    // These indexes ensure that there is atleast 2 samples
+    for (size_t i{1}; i < sorted_indexes.size(); i++) 
     {
         size_t current_idx = sorted_indexes[i];
         int current_label = data[current_idx].second;
         float current_feature = data[current_idx].first[feature_idx];
-
-        // Update the label counts on both sides of the split
-        left_label_counts[current_label]++;
-        right_label_counts[current_label]--;
 
         // Check repeated threshold.
         if (current_feature != last_seen_feature) 
@@ -45,13 +46,20 @@ std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const st
             double threshold = (current_feature + last_seen_feature) / 2;
 
             // Calculate the impurity scores based on the updated label counts
-            double left_score = calculate_node_score_from_label_counts(left_label_counts, i + 1);
-            double right_score = calculate_node_score_from_label_counts(right_label_counts, sorted_indexes.size() - i - 1);
-            double split_score = (left_score * (i + 1) + right_score * (sorted_indexes.size() - i - 1)) / data.size();
-
+            double left_score = calculate_node_score_from_label_counts(left_label_counts, i);
+            double right_score = calculate_node_score_from_label_counts(right_label_counts, sorted_indexes.size() - i);
+            double split_score = (left_score * (i) + right_score * (sorted_indexes.size() - i)) / data.size();
+            
+            // Call the constructor in place in the split_scores vector with emplace_back.
             split_scores.emplace_back(threshold, split_score);
             last_seen_feature = current_feature;
+
+            // Print out if required.
+            if (verbose){std::cout<<"Threshold: "<<threshold<<", Score: "<<split_score<<std::endl;}
         }
+        // Update the label counts on both sides of the split
+        left_label_counts[current_label]++;
+        right_label_counts[current_label]--;
     }
 
     return split_scores;
@@ -67,19 +75,19 @@ std::pair<size_t, float> Splitter::find_best_split(const std::vector<std::pair<s
     best_splits.clear();
 
     // Loop over all features in the data and find the best spilt for that feature.
-    for (size_t feature{0}; feature < data[0].first.size(); feature++)
+    for (size_t feature_idx{0}; feature_idx < data[0].first.size(); feature_idx++)
     {
-        sorted_indexes = sort_by_feature(data, feature);
-        splits_scores = calculate_split_scores(data, feature, sorted_indexes);
-        best_split_index = minimum_score(splits_scores);
+        sorted_indexes = sort_by_feature(data, feature_idx);
+        splits_scores = calculate_split_scores(data, feature_idx, sorted_indexes);
+        best_split_index = find_min_score_index(splits_scores);
         best_split = splits_scores[best_split_index];
         best_splits.push_back(best_split);
     }
-    size_t best_feature = minimum_score(best_splits);
+    size_t best_feature = find_min_score_index(best_splits);
     std::pair<size_t, double> best_feature_threshold = std::make_pair(best_feature, best_splits[best_feature].first);
     return best_feature_threshold;
 }
-size_t Splitter::minimum_score(const std::vector<std::pair<double, double>>& vec)
+size_t Splitter::find_min_score_index(const std::vector<std::pair<double, double>>& vec)
 {
     // A simple O(n) search for the index with the minimum score. 
     double min_val = vec[0].second;
@@ -96,7 +104,7 @@ size_t Splitter::minimum_score(const std::vector<std::pair<double, double>>& vec
     return min_index;
 }
 
-std::unordered_map<int, std::size_t> Splitter::label_counts(const std::vector<std::pair<std::vector<float>, int>>& data, const std::vector<size_t> indexes) const
+std::unordered_map<int, std::size_t> Splitter::count_labels(const std::vector<std::pair<std::vector<float>, int>>& data, const std::vector<size_t> indexes) const
 {
     // Counts the total number of labels an indexed part of the data set. 
     std::unordered_map<int, std::size_t> label_count_map;

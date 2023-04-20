@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 09:25:05
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 10:36:52
+ * @ Modified time: 2023-04-14 19:05:58
  * @ Description: Header file for the Splitter base class. 
  * 
  * Splitter objects derived from this base class find the optimal feature and feature threshold
@@ -29,10 +29,11 @@ public:
         virtual double calculate_node_score_from_label_counts(const std::unordered_map<int, size_t>& label_counts_map, const size_t n_data_points) const=0;
         std::vector<size_t> sort_by_feature(const std::vector<std::pair<std::vector<float>, int>>& data, const size_t feature_idx);
         std::vector<std::pair<double, double>> calculate_split_scores(const std::vector<std::pair<std::vector<float>, int>>& data, 
-                const size_t feature_idx, std::vector<size_t> sorted_indexes);
-        std::pair<size_t, float> find_best_split(const std::vector<std::pair<std::vector<float>, int>>& data);
-        size_t minimum_score(const std::vector<std::pair<double, double>>& vec);
-        std::unordered_map<int, size_t> label_counts(const std::vector<std::pair<std::vector<float>, int>>& data, const std::vector<size_t> indexes) const;
+                const size_t feature_idx, std::vector<size_t> sorted_indexes, bool verbose = false);
+        std::pair<size_t, float> find_best_split(const std::vector<std::pair<std::vector<float>, int>>& data); 
+protected:
+        std::unordered_map<int, size_t> count_labels(const std::vector<std::pair<std::vector<float>, int>>& data, const std::vector<size_t> indexes) const;
+        size_t find_min_score_index(const std::vector<std::pair<double, double>>& vec);
 };
 #endif
 

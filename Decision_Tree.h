@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:37:37
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 19:12:36
+ * @ Modified time: 2023-04-14 19:03:32
  * @ Description: Header file for the Decision_Tree class.
  * 
  * This class has access via a shared pointer to a Data_Loader and Splitter object
@@ -27,7 +27,7 @@ class Decision_Tree : public Tree_Model
 {
 public:
     Decision_Tree(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr<Splitter> splitter, bool boostrapped_data,
-                 int max_tree_depth, int min_samples_split);
+                 int max_tree_depth = 10, int min_samples_split = 2);
     virtual ~Decision_Tree();
     virtual void fit();
     friend std::ostream& operator<<(std::ostream& os, const Decision_Tree& Decision_Tree);
@@ -41,6 +41,6 @@ private:
     bool is_valid_leaf(const std::vector<std::pair<std::vector<float>, int>>& data, const int depth);
     std::unordered_map<int, std::size_t> label_counts(const std::vector<std::pair<std::vector<float>, int>>& data) const;
     float majority_vote_classify(const std::vector<std::pair<std::vector<float>, int>>& data);
-    std::unique_ptr<Node> recursively_build_tree(const std::vector<std::pair<std::vector<float>, int>>& data, int depth);
+    std::unique_ptr<Node> recursive_build_tree(const std::vector<std::pair<std::vector<float>, int>>& data, int depth);
 };
 #endif

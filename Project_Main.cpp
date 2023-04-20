@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 10:38:02
+ * @ Modified time: 2023-04-14 20:19:11
  * @ Description: Fits a decision tree and a radnom forest to a data set printing out the test accuracy and the confusion matricies.
  * 
  * Run with g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Node.cpp, Internal_Node.cpp, Leaf_Node.cpp, Tree_Model.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp
@@ -35,6 +35,7 @@ int main()
     std::shared_ptr<Splitter> gini_splitter = std::make_shared<Gini_Splitter>();
 
     
+    
      
     // for (size_t i = 0; i < data_loader->train_data().size(); i++)
     // {
@@ -54,7 +55,7 @@ int main()
     // gini_splitter->find_best_split(data_loader->train_data());
 
     // Decision Tree
-    int max_tree_depth{1000};
+    int max_tree_depth{3};
     int min_split_num{2};
     bool train_DT_on_bootsrapped_data{false};
     std::cout<<"Decision tree: \n"<<std::endl;
@@ -63,9 +64,8 @@ int main()
     std::cout<<dt1<<std::endl;
     std::cout<<"---------------"<<std::endl;
     dt1.evaluate_test_data();
-
     // Random Forest 
-    int num_trees{5};
+    int num_trees{200};
     std::cout<<"\n\nRandom Forest with "<<num_trees<<" trees:"<<std::endl;
     Random_Forest rf1(data_loader, gini_splitter, num_trees, max_tree_depth, min_split_num);
     rf1.fit();
