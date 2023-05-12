@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 14:34:12
+ * @ Modified time: 2023-05-01 14:02:51
  * @ Description: Implementation of the Decision_Tree class.
  */
 
@@ -43,45 +43,6 @@ std::ostream& operator<<(std::ostream& os, const Decision_Tree& decision_tree)
         os<<"Root is a null ptr so can't print";
         return os; 
     }
-}
-void Decision_Tree::evaluate_test_data()
-{
-    std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels(), std::vector<int>(data_loader_->n_labels(), 0));
-    int num_correct{0};
-    if (data_loader_->test_data().size() == 0)
-    {
-        std::cout << "There are no data points in the test set to evaluate."<<std::endl;
-        return;
-    }
-
-    for (size_t i{0}; i < data_loader_->test_data().size(); ++i) 
-    {
-        const std::vector<float>& features = data_loader_->test_data()[i].first;
-        int true_label = data_loader_->test_data()[i].second ;
-        int predicted_label = predict(features);
-        if (predicted_label == true_label) {num_correct++;}
-        confusion_matrix[predicted_label][true_label]++;
-    }
-
-    double accuracy = static_cast<double>(num_correct) / static_cast<double>(data_loader_->test_data().size());
-    // std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
-    std::cout<<"Test Data Accuracy: "<<accuracy<<std::endl;
-    std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
-    std::cout<<"Test Data Confusion matrix:\n "<< std::endl;
-
-    // Print out a nicely formatted confusion matrix.
-    std::cout<<"\t\t\t"<<"True Labels"<<"\t\n\t\t\t";
-    for (size_t i{0}; i < data_loader_->n_labels(); ++i) {std::cout<<i<<"\t";}
-    std::cout << std::endl;
-
-    for (size_t i{0}; i < data_loader_->n_labels(); ++i) 
-    {    
-        (i == 0) ? std::cout<<"Predicted Labels " : std::cout<<"\t\t ";
-        std::cout<<i<<"\t";
-        for (size_t j{0}; j < data_loader_->n_labels(); ++j) {std::cout<<confusion_matrix[i][j]<<"\t";}
-        std::cout<<std::endl;
-    }
-    std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
 }
 bool Decision_Tree::is_pure_node(const std::vector<std::pair<std::vector<float>, int>>& data) 
 {
@@ -134,7 +95,6 @@ std::unique_ptr<Node> Decision_Tree::recursive_build_tree(const std::vector<std:
         (data_point.first[feature_idx] <= threshold) ? left_data.push_back(data_point) : right_data.push_back(data_point);
     }
 
-    // may have an issue here... or maybe weve already 
     if (left_data.empty() || right_data.empty()) {
         // Don't create empty child nodes
         return std::unique_ptr<Node>(new Leaf_Node(majority_vote_classify(data), depth));

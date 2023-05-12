@@ -19,8 +19,6 @@ void Tree_Model::evaluate_test_data() const
         std::cout<<"There are no data points in the test set to evaluate."<<std::endl;
         return;
     }
-
-
     for (size_t i{0}; i < data_loader_->test_data().size(); ++i) 
     {
         const std::vector<float>& features = data_loader_->test_data()[i].first;
@@ -31,8 +29,9 @@ void Tree_Model::evaluate_test_data() const
     }
 
     double accuracy = static_cast<double>(num_correct) / static_cast<double>(data_loader_->test_data().size());
+    std::cout<<"---------------"<<std::endl;
     std::cout<<"Test Data Accuracy: "<<accuracy<<std::endl;
-    std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
+    std::cout<<"---------------"<<std::endl;
     std::cout<<"Test Data Confusion matrix:\n "<< std::endl;
 
     // Print out a nicely formatted confusion matrix.
@@ -47,7 +46,7 @@ void Tree_Model::evaluate_test_data() const
         for (size_t j{0}; j < data_loader_->n_labels(); ++j) {std::cout<<confusion_matrix[i][j]<<"\t";}
         std::cout<<std::endl;
     }
-    std::cout<<"- - - - - - - - - - - - - - -"<<std::endl;
+    std::cout<<"---------------"<<std::endl;
 };
 std::shared_ptr<Splitter> Tree_Model::get_splitter() const {return splitter_;}
 std::shared_ptr<Data_Loader> Tree_Model::get_data_loader() const {return data_loader_;}

@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:15:55
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 14:07:13
+ * @ Modified time: 2023-05-01 12:18:38
  * @ Description: Implementation of the Internal Node derived class.
  */
 
@@ -18,6 +18,6 @@ float Internal_Node::predict(const std::vector<float>& features) const
 void Internal_Node::print(std::ostream& os) const 
 {
     // Print out layer data and use recursion to put children nodes into the output stream. 
-    os<<"Internal node (depth="<<depth_<<"): Feature Index = "<<feature_index_<<", Threshold = "<<threshold_<<"\n";
+    os<<"Internal node (depth = "<<depth_<<"): Feature Index = "<<feature_index_<<", Threshold = "<<threshold_<<"\n";
     os<<"(<)  " <<*(left_child_)<<"\n"<< "(>)  " <<*(right_child_);
 }

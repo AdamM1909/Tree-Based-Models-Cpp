@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-08 14:45:09
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 19:58:08
+ * @ Modified time: 2023-05-01 11:59:46
  * @ Description: Implementation of the Splitter base class.
  */
 #include "Splitter.h"
@@ -20,8 +20,11 @@ std::vector<size_t> Splitter::sort_by_feature(const std::vector<std::pair<std::v
     return sorted_indices;
 }
 std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const std::vector<std::pair<std::vector<float>, int>>& data, const size_t feature_idx, 
-                                                                        std::vector<size_t> sorted_indexes, bool verbose)
+                                                                        const bool verbose)
 {
+    std::vector<size_t> sorted_indexes = sort_by_feature(data, feature_idx);
+    if (verbose){std::cout<<"Feature : "<<feature_idx<<std::endl;}
+    
     std::vector<std::pair<double, double>> split_scores;
     split_scores.reserve(data.size());
 
@@ -64,7 +67,7 @@ std::vector<std::pair<double, double>> Splitter::calculate_split_scores(const st
 
     return split_scores;
 }
-std::pair<size_t, float> Splitter::find_best_split(const std::vector<std::pair<std::vector<float>, int>>& data)
+std::pair<size_t, float> Splitter::find_best_split(const std::vector<std::pair<std::vector<float>, int>>& data, const bool verbose)
 {
     std::vector<size_t> sorted_indexes(data.size());
     std::vector<std::pair<double, double>> splits_scores(data.size() - 1);
@@ -77,14 +80,15 @@ std::pair<size_t, float> Splitter::find_best_split(const std::vector<std::pair<s
     // Loop over all features in the data and find the best spilt for that feature.
     for (size_t feature_idx{0}; feature_idx < data[0].first.size(); feature_idx++)
     {
-        sorted_indexes = sort_by_feature(data, feature_idx);
-        splits_scores = calculate_split_scores(data, feature_idx, sorted_indexes);
+        splits_scores = calculate_split_scores(data, feature_idx);
         best_split_index = find_min_score_index(splits_scores);
         best_split = splits_scores[best_split_index];
         best_splits.push_back(best_split);
     }
     size_t best_feature = find_min_score_index(best_splits);
     std::pair<size_t, double> best_feature_threshold = std::make_pair(best_feature, best_splits[best_feature].first);
+    if (verbose){std::cout<<"---------------\n"<<"Best Feature: "<<best_feature_threshold.first<<", Best Threshold: "
+                    <<best_feature_threshold.second<<"\n---------------"<<std::endl;}
     return best_feature_threshold;
 }
 size_t Splitter::find_min_score_index(const std::vector<std::pair<double, double>>& vec)

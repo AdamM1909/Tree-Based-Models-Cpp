@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-14 20:19:11
+ * @ Modified time: 2023-05-01 12:27:28
  * @ Description: Fits a decision tree and a radnom forest to a data set printing out the test accuracy and the confusion matricies.
  * 
  * Run with g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Node.cpp, Internal_Node.cpp, Leaf_Node.cpp, Tree_Model.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp
@@ -24,47 +24,35 @@
 
 int main() 
 {
-    // Hyper-parameters 
-    // std::string file_name{"breast_cancer_data_set.csv"};
-    // std::string file_name{"breast_cancer_data_set_string_labels_no_header.csv"};
-    std::string file_name{"waveform-5000_csv.csv"};
-    // std::string file_name{"test_data_set.txt"};
-    float train_fraction{0.8};
-    bool exclude_first_row{true};
-    std::shared_ptr<Data_Loader> data_loader = std::make_shared<Data_Loader>(file_name, exclude_first_row, train_fraction);
+    // Toy example to show Splitter public interface. 
+    std::string example_1_file_name{"test_data_set.txt"};
+    float example_1_train_fraction{1.0};
+    bool example_1_exclude_first_row{false};
+    Data_Loader example_1_data_loader(example_1_file_name, example_1_exclude_first_row, example_1_train_fraction);
+    Gini_Splitter example_1_gini_splitter;
+    example_1_gini_splitter.calculate_split_scores(example_1_data_loader.train_data(), 0, true);
+    example_1_gini_splitter.find_best_split(example_1_data_loader.train_data(), true);
+    
+    // Breast cancer classification data set example. This fits a decsion tree and a random forest. 
+    std::string file_name{"breast_cancer_data_set.csv"};
+    float example_2_train_fraction{0.8};
+    bool example_2_exclude_first_row{true};
+    std::shared_ptr<Data_Loader> data_loader = std::make_shared<Data_Loader>(file_name, example_2_exclude_first_row, example_2_train_fraction);
     std::shared_ptr<Splitter> gini_splitter = std::make_shared<Gini_Splitter>();
 
-    
-    
-     
-    // for (size_t i = 0; i < data_loader->train_data().size(); i++)
-    // {
-    //     std::cout<<data_loader->train_data()[i].first[0]<<"|"<<data_loader->train_data()[i].second<<std::endl;
-    // }
-    // std::cout<<"------"<<std::endl;
-    // auto bs = data_loader->bootstrapped_train_data();
-    
-    // for (size_t i = 0; i < bs.size(); i++)
-    // {
-    //     std::cout<<bs[i].first[0]<<"|"<<bs[i].second<<std::endl;
-    // }
-    // std::cout<<"------"<<std::endl;
-    
-    // gini_splitter->find_best_split(bs);
-    // std::cout<<"------"<<std::endl;
-    // gini_splitter->find_best_split(data_loader->train_data());
 
-    // Decision Tree
+    // Fitting the decision tree.
     int max_tree_depth{3};
     int min_split_num{2};
     bool train_DT_on_bootsrapped_data{false};
-    std::cout<<"Decision tree: \n"<<std::endl;
     Decision_Tree dt1(data_loader, gini_splitter, train_DT_on_bootsrapped_data, max_tree_depth, min_split_num);
     dt1.fit();
+    std::cout<<"Decsion Tree:"<<std::endl;
     std::cout<<dt1<<std::endl;
-    std::cout<<"---------------"<<std::endl;
     dt1.evaluate_test_data();
-    // Random Forest 
+
+    
+    // Fitting the random forest 
     int num_trees{200};
     std::cout<<"\n\nRandom Forest with "<<num_trees<<" trees:"<<std::endl;
     Random_Forest rf1(data_loader, gini_splitter, num_trees, max_tree_depth, min_split_num);
