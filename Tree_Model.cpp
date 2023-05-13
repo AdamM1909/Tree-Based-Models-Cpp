@@ -10,15 +10,16 @@ Tree_Model::Tree_Model(std::shared_ptr<Data_Loader> data_loader, std::shared_ptr
 Tree_Model::~Tree_Model() {};
 void Tree_Model::evaluate_test_data() const
 {
-  
+    // Initilise the confusion matrix with all zeros.
     std::vector<std::vector<int>> confusion_matrix(data_loader_->n_labels(), std::vector<int>(data_loader_->n_labels(), 0));
     int num_correct{0};
-
+    // Catch if there are no testing data points. 
     if (data_loader_->test_data().size() == 0)
     {
         std::cout<<"There are no data points in the test set to evaluate."<<std::endl;
         return;
     }
+    // Loop over the testing data set and predict each point. 
     for (size_t i{0}; i < data_loader_->test_data().size(); ++i) 
     {
         const std::vector<float>& features = data_loader_->test_data()[i].first;

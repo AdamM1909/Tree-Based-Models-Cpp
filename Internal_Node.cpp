@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 12:15:55
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-05-01 12:18:38
+ * @ Modified time: 2023-05-13 11:59:52
  * @ Description: Implementation of the Internal Node derived class.
  */
 
@@ -13,6 +13,7 @@ Internal_Node::Internal_Node(int feature_index, float threshold, std::unique_ptr
 Internal_Node::~Internal_Node() {}
 float Internal_Node::predict(const std::vector<float>& features) const 
 {
+    // Override the predict fucntion using recursion. 
     return (features[feature_index_] <= threshold_) ? left_child_->predict(features) : right_child_->predict(features);
 }
 void Internal_Node::print(std::ostream& os) const 

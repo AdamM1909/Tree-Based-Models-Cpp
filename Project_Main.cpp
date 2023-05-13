@@ -2,11 +2,14 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-11 15:04:53
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-05-01 12:27:28
- * @ Description: Fits a decision tree and a radnom forest to a data set printing out the test accuracy and the confusion matricies.
+ * @ Modified time: 2023-05-13 12:08:48
+ * @ Description: 
+ * Demonsatrtes the splitter public interface with a toy data set. 
+ *  
+ * Fits a decision tree and a random forest to a data set printing out the test accuracy and the confusion matricies.
  * 
- * Run with g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Node.cpp, Internal_Node.cpp, Leaf_Node.cpp, Tree_Model.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp
- * ./Project
+ * Compile with with:  g++ -o Project Data_Loader.cpp, Splitter.cpp, Gini_Splitter.cpp, Entropy_Splitter.cpp, Node.cpp, Internal_Node.cpp, Leaf_Node.cpp, Tree_Model.cpp, Decision_Tree.cpp, Random_Forest.cpp, Project_Main.cpp
+ * Run with: ./Project
  */
 
 

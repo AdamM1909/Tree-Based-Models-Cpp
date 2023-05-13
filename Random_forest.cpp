@@ -2,7 +2,7 @@
  * @ Author: Adam Myers
  * @ Create Time: 2023-04-10 14:58:54
  * @ Modified by: Adam Myers
- * @ Modified time: 2023-04-13 17:35:54
+ * @ Modified time: 2023-05-13 12:02:55
  * @ Description: Implementation of the Random_Forest derived class.
  */
 
@@ -16,7 +16,9 @@ Random_Forest::Random_Forest(std::shared_ptr<Data_Loader> data_loader,const std:
 Random_Forest::~Random_Forest() {};
 void Random_Forest::fit() 
 {
+    // Reserve the ememory. 
     trees_.reserve(num_trees_);
+    // A loop to fit all the trees on different bootstrap samples.
     for (size_t i{0}; i < num_trees_; i++) 
     {
         std::shared_ptr<Decision_Tree> tree = std::make_shared<Decision_Tree>(data_loader_, splitter_, true, max_tree_depth_, min_samples_split_);
@@ -28,7 +30,7 @@ void Random_Forest::fit()
 float Random_Forest::predict(const std::vector<float>& features) const
 {   
     std::unordered_map<float, int> label_votes;
-    // Iterate over the decision trees and use each one to make a prediction
+    // Iterate over the decision trees and use each one to make a prediction.
     for (auto& tree : trees_) 
     {
         float prediction = tree->predict(features);
@@ -37,6 +39,7 @@ float Random_Forest::predict(const std::vector<float>& features) const
 
     float best_label{0};
     int max_votes{0};
+    // Aggregate in a majority. 
     for (const auto& pair : label_votes) 
     {
         if (pair.second > max_votes) 
